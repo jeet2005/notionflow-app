@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings – NotionFlow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e5e7eb;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --card: #020617;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: auto;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back {
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* ---------- LAYOUT ---------- */
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 32px 16px;
+    }
+
+    /* ---------- TABS ---------- */
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .tab {
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
+      background: var(--bg);
+    }
+
+    .tab.active {
+      background: var(--card);
+      border-bottom: 2px solid var(--primary);
+    }
+
+    /* ---------- CARD ---------- */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .card p.desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ---------- FORM ---------- */
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    input:disabled {
+      background: #e5e7eb;
+      color: #64748b;
+    }
+
+    button {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    /* ---------- THEME ---------- */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .theme {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .theme.active {
+      border-color: var(--primary);
+      background: rgba(16,185,129,0.1);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    </style>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/settings.js" defer></script>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="back" onclick="goBack()">←</div>
+    <h1>Settings</h1>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('profile')">Profile</div>
+    <div class="tab" onclick="switchTab('appearance')">Appearance</div>
+    <div class="tab" onclick="switchTab('account')">Account</div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profile" class="section active">
+    <div class="card">
+      <h2>Profile</h2>
+      <p class="desc">Manage your personal information and preferences.</p>
+
+      <label>Display Name</label>
+      <input id="displayName" placeholder="Your display name" />
+
+      <label>Email</label>
+      <input id="email" disabled />
+      <p class="muted">Your email cannot be changed.</p>
+
+      <br />
+      <button onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- APPEARANCE -->
+  <div id="appearance" class="section">
+    <div class="card">
+      <h2>Appearance</h2>
+      <p class="desc">Customize how NotionFlow looks on your device.</p>
+
+      <label>Theme</label>
+      <div class="theme-grid">
+        <div class="theme" onclick="setTheme('light')">☀ Light</div>
+        <div class="theme" onclick="setTheme('dark')">🌙 Dark</div>
+        <div class="theme" onclick="setTheme('system')">💻 System</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div id="account" class="section">
+    <div class="card">
+      <h2>Account</h2>
+      <p class="desc">Manage your account settings and security.</p>
+
+      <label>Account ID</label>
+      <input id="userId" disabled />
+
+      <label>Created At</label>
+      <p id="createdAt" class="muted"></p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

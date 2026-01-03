@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>404 – Page Not Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --bg: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .container {
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 64px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    a:hover {
+      border-color: var(--primary);
+    }
+
+    .path {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+    </style>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/404.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>404</h1>
+  <p>Oops! Page not found</p>
+  <a href="index.html">Return to Home</a>
+
+  <div class="path" id="path"></div>
+</div>
+
+</body>
+</html>

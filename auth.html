@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auth – NotionFlow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      margin: 0 auto 12px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .tab {
+      padding: 10px;
+      text-align: center;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: white;
+      border: 1px solid var(--border);
+    }
+
+    /* Form */
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    </style>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js" defer></script>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="header">
+    <div class="logo">📄</div>
+    <h1>NotionFlow</h1>
+    <p>Your ideas, documents & plans. Together.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('signin')">Sign In</div>
+    <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+  </div>
+
+  <div id="error" class="error"></div>
+
+  <!-- SIGN IN -->
+  <form id="signin" class="form active" onsubmit="submitAuth(event, 'signin')">
+    <label>Email</label>
+    <input type="email" id="signinEmail" placeholder="you@example.com" />
+
+    <label>Password</label>
+    <input type="password" id="signinPassword" placeholder="••••••••" />
+
+    <button id="signinBtn">Sign In</button>
+  </form>
+
+  <!-- SIGN UP -->
+  <form id="signup" class="form" onsubmit="submitAuth(event, 'signup')">
+    <label>Email</label>
+    <input type="email" id="signupEmail" placeholder="you@example.com" />
+
+    <label>Password</label>
+    <input type="password" id="signupPassword" placeholder="••••••••" />
+
+    <button id="signupBtn">Create Account</button>
+  </form>
+</div>
+
+</body>
+</html>
