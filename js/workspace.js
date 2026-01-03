@@ -1,6 +1,7 @@
 /* ---------- AUTH GUARD ---------- */
-const user = JSON.parse(localStorage.getItem("user"));
-if (!user) {
+const API_URL = "http://127.0.0.1:8000";
+const token = localStorage.getItem("token");
+if (!token) {
   window.location.href = "auth.html";
 }
 
@@ -23,25 +24,85 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () 
 });
 
 /* ---------- DATA ---------- */
-let pages = JSON.parse(localStorage.getItem("pages")) || [];
+let pages = [];
 let activePageId = null;
 
 /* ---------- INIT ---------- */
-if (pages.length === 0) {
-  const welcomePage = {
-    id: Date.now().toString(),
-    title: "Welcome",
-    content: "Welcome to NotionFlow! This is your first page. Start writing...",
-    createdAt: Date.now()
-  };
-  pages.push(welcomePage);
-  save();
-  selectPage(welcomePage.id);
-} else {
+async function init() {
+  await loadPages();
+  if (pages.length === 0) {
+    await createPageAPI("Welcome", "Welcome to NotionFlow! This is your first page. Start writing...");
+  }
   selectPage(pages[0].id);
+  renderPages();
 }
 
-renderPages();
+init();
+
+/* ---------- API FUNCTIONS ---------- */
+
+async function loadPages() {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch(`${API_URL}/pages/?user_id=current_user`, {
+      method: "GET",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if (response.ok) {
+      pages = await response.json();
+      console.log("Pages loaded:", pages);
+    } else {
+      console.error("Failed to load pages:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error loading pages:", error);
+  }
+}
+
+async function createPageAPI(title, content) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch(`${API_URL}/pages/?user_id=current_user`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, content })
+    });
+    if (response.ok) {
+      const newPage = await response.json();
+      pages.unshift(newPage);
+      return newPage.id;
+    } else {
+      console.error("Failed to create page:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error creating page:", error);
+  }
+}
+
+async function updatePageAPI(pageId, title, content) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch(`${API_URL}/pages/${pageId}?user_id=current_user`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, content })
+    });
+    if (!response.ok) {
+      console.error("Failed to update page:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error updating page:", error);
+  }
+}
 
 /* ---------- FUNCTIONS ---------- */
 
@@ -72,31 +133,23 @@ function selectPage(id) {
 }
 
 function createPage(title = "Untitled") {
-  const page = {
-    id: Date.now().toString(),
-    title,
-    content: "",
-    createdAt: Date.now()
-  };
-
-  pages.unshift(page);
-  save();
-  selectPage(page.id);
+  createPageAPI(title, "").then(id => {
+    if (id) {
+      selectPage(id);
+      renderPages();
+    }
+  });
 }
 
 function updateTitle(el) {
   const page = pages.find(p => p.id === activePageId);
   page.title = el.innerText;
-  save();
+  updatePageAPI(activePageId, page.title, page.content);
   renderPages();
 }
 
 function updateContent(el) {
   const page = pages.find(p => p.id === activePageId);
   page.content = el.value;
-  save();
-}
-
-function save() {
-  localStorage.setItem("pages", JSON.stringify(pages));
+  updatePageAPI(activePageId, page.title, page.content);
 }

@@ -12,13 +12,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from routes import auth, pages, users
+
 @app.get("/")
 async def root():
     return {"message": "NotionFlow API is running"}
 
-@app.get("/test")
-async def test():
-    return {"status": "ok", "message": "Test endpoint working"}
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(pages.router, prefix="/pages", tags=["pages"])
+app.include_router(users.router, prefix="/users", tags=["users"])
 
 if __name__ == "__main__":
     import uvicorn
